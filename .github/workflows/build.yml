@@ -1,0 +1,38 @@
+name: Build ESP32-S3 IDF v5.5.2
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_firmware:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取仓库代码
+        uses: actions/checkout@v4
+
+      - name: 缓存ESP-IDF工具加速构建
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.espressif
+          key: ${{ runner.os }}-esp-idf-v5.5.2-esp32s3
+
+      - name: 配置ESP-IDF v5.5.2
+        uses: espressif/setup-esp-idf@v1
+        with:
+          esp-idf-version: "v5.5.2"
+          target-chip: esp32s3
+
+      - name: 编译工程
+        run: |
+          idf.py set-target esp32s3
+          idf.py build
+
+      - name: 上传固件产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESP32S3-firmware-bin
+          path: build/*.bin
