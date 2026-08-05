@@ -21,10 +21,9 @@ jobs:
           key: ${{ runner.os }}-esp-idf-v6.0.2-esp32s3
 
       - name: 配置ESP-IDF v6.0.2
-        uses: espressif/setup-esp-idf@v1
+        uses: espressif/install-esp-idf-action@v1
         with:
-          esp-idf-version: "v6.0.2"
-          target-chip: esp32s3
+          version: "v6.0.2"
 
       - name: 编译工程
         run: |
