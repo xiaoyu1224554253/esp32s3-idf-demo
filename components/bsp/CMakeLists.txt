@@ -4,5 +4,5 @@ idf_component_register(
          "src/bsp_touch.c"
          "src/bsp_backlight.c"
     INCLUDE_DIRS "include"
-    REQUIRES driver esp_lcd esp_timer
+    REQUIRES driver esp_lcd esp_timer esp_driver_ledc
 )
