@@ -9,6 +9,7 @@
 - [硬件资料](./hardware.md)
 - [参考资料](./references/)
 - [网页端参考素材](./references/web/README.md)
+- [ESP32 参考项目分析](./references/esp32/README.md)
 
 ## UI 原型
 
