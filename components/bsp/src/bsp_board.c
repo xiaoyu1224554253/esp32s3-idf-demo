@@ -1,4 +1,5 @@
 #include "bsp_board.h"
+#include "bsp_pins.h"
 #include "bsp_lcd.h"
 #include "bsp_touch.h"
 #include "bsp_backlight.h"
