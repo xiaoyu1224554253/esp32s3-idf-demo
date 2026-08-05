@@ -8,6 +8,7 @@
 - [需求文档](./requirements.md)
 - [硬件资料](./hardware.md)
 - [参考资料](./references/)
+- [网页端参考素材](./references/web/README.md)
 
 ## UI 原型
 
