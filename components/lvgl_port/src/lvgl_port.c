@@ -2,6 +2,7 @@
 #include "bsp_lcd.h"
 #include "bsp_touch.h"
 #include "bsp_pins.h"
+#include "lvgl.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
