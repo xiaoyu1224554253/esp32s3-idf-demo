@@ -5,6 +5,8 @@
 #include "bsp_board.h"
 #include "bsp_backlight.h"
 #include "bsp_lcd.h"
+#include "lvgl_port.h"
+#include "lvgl.h"
 
 static const char *TAG = "MAIN";
 
@@ -20,18 +22,33 @@ void app_main(void)
 
     bsp_backlight_set(100);
 
-    // Test: fill screen with red, green, blue
+    ret = lvgl_port_init();
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "LVGL port init failed");
+        return;
+    }
+
+    lvgl_port_lock();
+
+    // Simple test UI
+    lv_obj_t *label = lv_label_create(lv_scr_act());
+    lv_label_set_text(label, "Hello ES3C28P!");
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_24, 0);
+    lv_obj_set_style_text_color(label, lv_color_white(), 0);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+
+    lv_obj_t *btn = lv_btn_create(lv_scr_act());
+    lv_obj_set_size(btn, 120, 50);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -20);
+    lv_obj_t *btn_label = lv_label_create(btn);
+    lv_label_set_text(btn_label, "Touch me");
+    lv_obj_center(btn_label);
+
+    lvgl_port_unlock();
+
+    ESP_LOGI(TAG, "UI created");
+
     while (1) {
-        ESP_LOGI(TAG, "Fill red");
-        bsp_lcd_fill_screen(0xF800); // RGB565 red
-        vTaskDelay(pdMS_TO_TICKS(1000));
-
-        ESP_LOGI(TAG, "Fill green");
-        bsp_lcd_fill_screen(0x07E0); // RGB565 green
-        vTaskDelay(pdMS_TO_TICKS(1000));
-
-        ESP_LOGI(TAG, "Fill blue");
-        bsp_lcd_fill_screen(0x001F); // RGB565 blue
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
