@@ -2,12 +2,15 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "music_player.h"
 
 static const char *TAG = "MAIN";
 
 void app_main(void)
 {
     ESP_LOGI(TAG, "ESP32-S3 IDF v6.0.2 demo started");
+
+    music_player_init();
 
     while (1) {
         ESP_LOGI(TAG, "Running...");
