@@ -10,6 +10,12 @@
 
 static const char *TAG = "MAIN";
 
+static void btn_event_cb(lv_event_t *event)
+{
+    (void)event;
+    ESP_LOGI(TAG, "Button clicked");
+}
+
 void app_main(void)
 {
     ESP_LOGI(TAG, "ESP32-S3 Music Player starting");
@@ -43,6 +49,7 @@ void app_main(void)
     lv_obj_t *btn_label = lv_label_create(btn);
     lv_label_set_text(btn_label, "Touch me");
     lv_obj_center(btn_label);
+    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
 
     lvgl_port_unlock();
 
