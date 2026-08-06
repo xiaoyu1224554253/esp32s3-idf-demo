@@ -78,8 +78,17 @@ esp_err_t music_player_scan_sdcard(void)
         if (s_state.track_count >= MUSIC_PLAYER_MAX_TRACKS) break;
 
         music_player_track_t *track = &s_state.tracks[s_state.track_count];
-        snprintf(track->path, sizeof(track->path), "%s/%s",
-                 bsp_sdcard_get_mount_point(), entry->d_name);
+        const char *mount = bsp_sdcard_get_mount_point();
+        strncpy(track->path, mount, sizeof(track->path) - 1);
+        track->path[sizeof(track->path) - 1] = '\0';
+        size_t path_len = strlen(track->path);
+        if (path_len < sizeof(track->path) - 1) {
+            track->path[path_len++] = '/';
+            track->path[path_len] = '\0';
+        }
+        if (path_len < sizeof(track->path) - 1) {
+            strncat(track->path, entry->d_name, sizeof(track->path) - path_len - 1);
+        }
         extract_title(entry->d_name, track->title, sizeof(track->title));
         strncpy(track->artist, "Unknown Artist", sizeof(track->artist) - 1);
         track->duration_ms = 0;

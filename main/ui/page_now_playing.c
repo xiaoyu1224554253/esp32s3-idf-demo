@@ -1,8 +1,5 @@
 #include "music_player_ui.h"
 #include "music_player.h"
-#include "esp_log.h"
-
-static const char *TAG = "ui_now_playing";
 
 static lv_obj_t *title_label = NULL;
 static lv_obj_t *artist_label = NULL;

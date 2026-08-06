@@ -1,8 +1,5 @@
 #include "music_player_ui.h"
 #include "music_player.h"
-#include "esp_log.h"
-
-static const char *TAG = "ui_playlist";
 
 static void track_click_cb(lv_event_t *e)
 {
