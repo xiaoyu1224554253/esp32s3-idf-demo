@@ -23,7 +23,7 @@ jobs:
       - name: 合并完整固件
         shell: bash
         run: |
-          source $IDF_PATH/export.sh
+          source /opt/esp/idf/export.sh
           esptool.py --chip esp32s3 merge_bin -o build/firmware-all.bin \
             0x0 build/bootloader/bootloader.bin \
             0x8000 build/partition_table/partition-table.bin \
