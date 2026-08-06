@@ -63,6 +63,8 @@ esp_err_t audio_engine_init(void)
         return ESP_ERR_NO_MEM;
     }
 
+    bsp_audio_start();
+
     xTaskCreate(audio_engine_task, "audio_engine", AUDIO_ENGINE_TASK_STACK_SIZE,
                 NULL, AUDIO_ENGINE_TASK_PRIORITY, &s_task_handle);
 

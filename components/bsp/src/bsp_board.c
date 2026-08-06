@@ -45,6 +45,7 @@ esp_err_t bsp_board_init(void)
         ESP_LOGE(TAG, "backlight init failed: %s", esp_err_to_name(ret));
         return ret;
     }
+    bsp_backlight_set(100);
 
     ret = bsp_lcd_init();
     if (ret != ESP_OK) {
@@ -66,8 +67,7 @@ esp_err_t bsp_board_init(void)
 
     ret = bsp_sdcard_init();
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "sdcard init failed: %s", esp_err_to_name(ret));
-        return ret;
+        ESP_LOGW(TAG, "sdcard init failed: %s, continuing without sdcard", esp_err_to_name(ret));
     }
 
     ESP_LOGI(TAG, "BSP initialized");
