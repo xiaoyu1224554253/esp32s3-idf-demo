@@ -1,19 +1,23 @@
 #include <stdio.h>
-#include <math.h>
+#include <string.h>
+#include <dirent.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "bsp_board.h"
-#include "bsp_audio.h"
+#include "bsp_sdcard.h"
 
 static const char *TAG = "MAIN";
 
-#define SINE_SAMPLES 256
-static int16_t sine_buffer[SINE_SAMPLES];
+static bool is_mp3(const char *filename)
+{
+    size_t len = strlen(filename);
+    return len > 4 && strcasecmp(filename + len - 4, ".mp3") == 0;
+}
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "Audio sine wave test");
+    ESP_LOGI(TAG, "SD card file enumeration test");
 
     esp_err_t ret = bsp_board_init();
     if (ret != ESP_OK) {
@@ -21,14 +25,25 @@ void app_main(void)
         return;
     }
 
-    bsp_audio_set_volume(50);
-    bsp_audio_start();
-
-    for (int i = 0; i < SINE_SAMPLES; i++) {
-        sine_buffer[i] = (int16_t)(30000 * sin(2 * M_PI * 1000 * i / BSP_AUDIO_SAMPLE_RATE));
+    DIR *dir = opendir(bsp_sdcard_get_mount_point());
+    if (dir == NULL) {
+        ESP_LOGE(TAG, "failed to open dir");
+        return;
     }
 
+    struct dirent *entry;
+    int count = 0;
+    while ((entry = readdir(dir)) != NULL) {
+        if (is_mp3(entry->d_name)) {
+            ESP_LOGI(TAG, "MP3: %s", entry->d_name);
+            count++;
+        }
+    }
+    closedir(dir);
+
+    ESP_LOGI(TAG, "found %d mp3 files", count);
+
     while (1) {
-        bsp_audio_write(sine_buffer, SINE_SAMPLES);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
