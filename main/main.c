@@ -3,14 +3,15 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "bsp_board.h"
-#include "bsp_sdcard.h"
-#include "audio_engine.h"
+#include "lvgl_port.h"
+#include "music_player.h"
+#include "music_player_ui.h"
 
 static const char *TAG = "MAIN";
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "MP3 playback test");
+    ESP_LOGI(TAG, "Music Player starting");
 
     esp_err_t ret = bsp_board_init();
     if (ret != ESP_OK) {
@@ -18,16 +19,20 @@ void app_main(void)
         return;
     }
 
-    ret = audio_engine_init();
+    ret = lvgl_port_init();
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "audio engine init failed");
+        ESP_LOGE(TAG, "LVGL init failed");
         return;
     }
 
-    audio_engine_set_volume(50);
-    audio_engine_play_file("/sdcard/test.mp3");
+    music_player_init();
+    music_player_scan_sdcard();
+
+    ui_init();
+    ui_show_now_playing();
 
     while (1) {
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        ui_update_now_playing();
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
