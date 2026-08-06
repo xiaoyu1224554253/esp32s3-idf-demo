@@ -45,6 +45,14 @@
 #define BSP_LCD_SPI_CLOCK_HZ        (20 * 1000 * 1000)
 #define BSP_LCD_SPI_MODE            0
 
+// SD card (SDIO 4-bit)
+#define BSP_SDMMC_CLK_GPIO          GPIO_NUM_38
+#define BSP_SDMMC_CMD_GPIO          GPIO_NUM_40
+#define BSP_SDMMC_D0_GPIO           GPIO_NUM_39
+#define BSP_SDMMC_D1_GPIO           GPIO_NUM_41
+#define BSP_SDMMC_D2_GPIO           GPIO_NUM_48
+#define BSP_SDMMC_D3_GPIO           GPIO_NUM_47
+
 // Boot button
 #define BSP_BOOT_BUTTON_GPIO        GPIO_NUM_0
 

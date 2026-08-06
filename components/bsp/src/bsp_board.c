@@ -4,6 +4,7 @@
 #include "bsp_touch.h"
 #include "bsp_backlight.h"
 #include "bsp_audio.h"
+#include "bsp_sdcard.h"
 #include "esp_log.h"
 
 static const char *TAG = "bsp_board";
@@ -60,6 +61,12 @@ esp_err_t bsp_board_init(void)
     ret = bsp_audio_init();
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "audio init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = bsp_sdcard_init();
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "sdcard init failed: %s", esp_err_to_name(ret));
         return ret;
     }
 
