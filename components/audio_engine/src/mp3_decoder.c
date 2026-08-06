@@ -1,4 +1,5 @@
 #include "mp3_decoder.h"
+#define MINIMP3_IMPLEMENTATION
 #include "minimp3.h"
 #include "esp_log.h"
 #include <stdlib.h>
