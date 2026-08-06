@@ -1,24 +1,19 @@
 #include <stdio.h>
+#include <math.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "bsp_board.h"
-#include "bsp_backlight.h"
-#include "bsp_lcd.h"
-#include "lvgl_port.h"
-#include "lvgl.h"
+#include "bsp_audio.h"
 
 static const char *TAG = "MAIN";
 
-static void btn_event_cb(lv_event_t *event)
-{
-    (void)event;
-    ESP_LOGI(TAG, "Button clicked");
-}
+#define SINE_SAMPLES 256
+static int16_t sine_buffer[SINE_SAMPLES];
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "ESP32-S3 Music Player starting");
+    ESP_LOGI(TAG, "Audio sine wave test");
 
     esp_err_t ret = bsp_board_init();
     if (ret != ESP_OK) {
@@ -26,36 +21,14 @@ void app_main(void)
         return;
     }
 
-    bsp_backlight_set(100);
+    bsp_audio_set_volume(50);
+    bsp_audio_start();
 
-    ret = lvgl_port_init();
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "LVGL port init failed");
-        return;
+    for (int i = 0; i < SINE_SAMPLES; i++) {
+        sine_buffer[i] = (int16_t)(30000 * sin(2 * M_PI * 1000 * i / BSP_AUDIO_SAMPLE_RATE));
     }
 
-    lvgl_port_lock();
-
-    // Simple test UI
-    lv_obj_t *label = lv_label_create(lv_scr_act());
-    lv_label_set_text(label, "Hello ES3C28P!");
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_14, 0);
-    lv_obj_set_style_text_color(label, lv_color_white(), 0);
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-
-    lv_obj_t *btn = lv_btn_create(lv_scr_act());
-    lv_obj_set_size(btn, 120, 50);
-    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -20);
-    lv_obj_t *btn_label = lv_label_create(btn);
-    lv_label_set_text(btn_label, "Touch me");
-    lv_obj_center(btn_label);
-    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
-
-    lvgl_port_unlock();
-
-    ESP_LOGI(TAG, "UI created");
-
     while (1) {
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        bsp_audio_write(sine_buffer, SINE_SAMPLES);
     }
 }

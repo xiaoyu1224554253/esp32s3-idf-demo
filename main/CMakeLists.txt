@@ -1,3 +1,3 @@
 idf_component_register(SRCS "main.c"
                        INCLUDE_DIRS "."
-                       PRIV_REQUIRES bsp lvgl_port)
+                       PRIV_REQUIRES bsp)
