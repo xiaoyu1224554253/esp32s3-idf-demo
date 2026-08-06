@@ -1,3 +1,3 @@
 idf_component_register(SRCS "main.c"
                        INCLUDE_DIRS "."
-                       PRIV_REQUIRES bsp)
+                       PRIV_REQUIRES bsp audio_engine)
