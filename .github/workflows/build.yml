@@ -20,8 +20,11 @@ jobs:
           esp_idf_version: "v6.0.2"
           target: "esp32s3"
 
-      - name: 上传固件产物
+      - name: 上传完整固件产物
         uses: actions/upload-artifact@v4
         with:
           name: ESP32S3-firmware-bin
-          path: build/*.bin
+          path: |
+            build/bootloader/bootloader.bin
+            build/partition_table/partition-table.bin
+            build/*.bin
