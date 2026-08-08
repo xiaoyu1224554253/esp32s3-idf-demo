@@ -4,6 +4,8 @@
 #include "esp_log.h"
 #include "bsp_board.h"
 #include "lvgl_port.h"
+#include "ui_manager.h"
+#include "player_engine.h"
 
 static const char *TAG = "MAIN";
 
@@ -22,6 +24,16 @@ void app_main(void)
         ESP_LOGE(TAG, "LVGL init failed");
         return;
     }
+
+    ui_manager_init();
+    ESP_LOGI(TAG, "UI initialized");
+
+    ret = player_engine_init();
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "player engine init failed");
+        return;
+    }
+    ESP_LOGI(TAG, "player engine initialized");
 
     ESP_LOGI(TAG, "system initialized");
 
